@@ -1,24 +1,10 @@
 'use strict';
 
-const Translator = require('../components/translator.js');
+const {Translator, highlightTranslation} = require('../components/translator.js');
 
 module.exports = function (app) {
   
   const translator = new Translator();
-
-  const wrapWordWithHightligntTag = (word) => {
-    return `<span class="highlight">${word}</span>`
-  }
-
-  const highLightTranslation = (translationResult) => {
-    return translationResult.translation.split(' ').map(word => {
-      if (translationResult.translatedWords.includes(word)) {
-        return wrapWordWithHightligntTag(word);
-      }
-
-      return word;
-    }).join(' ');
-  }
   
   app.route('/api/translate')
     .post((req, res) => {
@@ -34,7 +20,7 @@ module.exports = function (app) {
         if (translationResult.translation == text) {
           translation = 'Everything looks good to me!';
         } else {
-          translation = highLightTranslation(translationResult);
+          translation = highlightTranslation(translationResult);
         }
         
         result = {

@@ -32,8 +32,7 @@ class Translator {
   }
 
   _checkWordIsTime(word, locale) {
-    const regexp = new RegExp(`[0-9]{2}[\.:][0-9]{2}`);
-    
+    const regexp = new RegExp(`[0-9]{1,2}[\.:][0-9]{2}`);
     return regexp.test(word);
   }
 
@@ -99,4 +98,25 @@ class Translator {
 
 }
 
-module.exports = Translator;
+const wrapWordWithHightligntTag = (word) => {
+  return `<span class="highlight">${word}</span>`
+}
+
+const highlightTranslation = (translationResult) => {
+  return translationResult.translation.split(' ').map(word => {
+    if (translationResult.translatedWords.includes(word)) {
+      return wrapWordWithHightligntTag(word);
+    }
+
+    return word;
+  }).join(' ');
+}
+
+module.exports = {
+  Translator: Translator,
+  highlightTranslation: highlightTranslation,
+  locales: {
+    AMERICAN_TO_BRITISH: AMERICAN_TO_BRITISH,
+    BRITISH_TO_AMERICAN: BRITISH_TO_AMERICAN
+  }
+};
